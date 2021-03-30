@@ -4,7 +4,8 @@
   "description": "tgd-test",
   "main": "index.js",
   "scripts": {
-    "start": "npm install"
+    "start": "npm install",
+    "end": "ls"
   },
   "author": "tgd-test",
   "license": "ISC",
