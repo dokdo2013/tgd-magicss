@@ -1,0 +1,1152 @@
+<html lang="ko">
+
+<head>
+    <style type="text/css" id="alertifyCSS">
+        .alertify-logs>* {
+            padding: 12px 24px;
+            color: #fff;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .2);
+            border-radius: 1px
+        }
+
+        .alertify-logs>*,
+        .alertify-logs>.default {
+            background: rgba(0, 0, 0, .8)
+        }
+
+        .alertify-logs>.error {
+            background: rgba(244, 67, 54, .8)
+        }
+
+        .alertify-logs>.success {
+            background: rgba(76, 175, 80, .9)
+        }
+
+        .alertify {
+            position: fixed;
+            background-color: rgba(0, 0, 0, .3);
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1
+        }
+
+        .alertify.hide {
+            opacity: 0;
+            pointer-events: none
+        }
+
+        .alertify,
+        .alertify.show {
+            box-sizing: border-box;
+            transition: all .33s cubic-bezier(.25, .8, .25, 1)
+        }
+
+        .alertify,
+        .alertify * {
+            box-sizing: border-box
+        }
+
+        .alertify .dialog {
+            padding: 12px
+        }
+
+        .alertify .alert,
+        .alertify .dialog {
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%)
+        }
+
+        .alertify .alert>*,
+        .alertify .dialog>* {
+            width: 400px;
+            max-width: 95%;
+            margin: 0 auto;
+            text-align: center;
+            padding: 12px;
+            background: #fff;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .14), 0 4px 5px 0 rgba(0, 0, 0, .098), 0 1px 10px 0 rgba(0, 0, 0, .084)
+        }
+
+        .alertify .alert .msg,
+        .alertify .dialog .msg {
+            padding: 12px;
+            margin-bottom: 12px;
+            margin: 0;
+            text-align: left
+        }
+
+        .alertify .alert input:not(.form-control),
+        .alertify .dialog input:not(.form-control) {
+            margin-bottom: 15px;
+            width: 100%;
+            font-size: 100%;
+            padding: 12px
+        }
+
+        .alertify .alert input:not(.form-control):focus,
+        .alertify .dialog input:not(.form-control):focus {
+            outline-offset: -2px
+        }
+
+        .alertify .alert nav,
+        .alertify .dialog nav {
+            text-align: right
+        }
+
+        .alertify .alert nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button),
+        .alertify .dialog nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button) {
+            background: transparent;
+            box-sizing: border-box;
+            color: rgba(0, 0, 0, .87);
+            position: relative;
+            outline: 0;
+            border: 0;
+            display: inline-block;
+            -ms-flex-align: center;
+            -ms-grid-row-align: center;
+            align-items: center;
+            padding: 0 6px;
+            margin: 6px 8px;
+            line-height: 36px;
+            min-height: 36px;
+            white-space: nowrap;
+            min-width: 88px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 2px
+        }
+
+        .alertify .alert nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button):active,
+        .alertify .alert nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button):hover,
+        .alertify .dialog nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button):active,
+        .alertify .dialog nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button):hover {
+            background-color: rgba(0, 0, 0, .05)
+        }
+
+        .alertify .alert nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button):focus,
+        .alertify .dialog nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button):focus {
+            border: 1px solid rgba(0, 0, 0, .1)
+        }
+
+        .alertify .alert nav button.btn,
+        .alertify .dialog nav button.btn {
+            margin: 6px 4px
+        }
+
+        .alertify-logs {
+            position: fixed;
+            z-index: 1
+        }
+
+        .alertify-logs.bottom,
+        .alertify-logs:not(.top) {
+            bottom: 16px
+        }
+
+        .alertify-logs.left,
+        .alertify-logs:not(.right) {
+            left: 16px
+        }
+
+        .alertify-logs.left>*,
+        .alertify-logs:not(.right)>* {
+            float: left;
+            transform: translateZ(0);
+            height: auto
+        }
+
+        .alertify-logs.left>.show,
+        .alertify-logs:not(.right)>.show {
+            left: 0
+        }
+
+        .alertify-logs.left>*,
+        .alertify-logs.left>.hide,
+        .alertify-logs:not(.right)>*,
+        .alertify-logs:not(.right)>.hide {
+            left: -110%
+        }
+
+        .alertify-logs.right {
+            right: 16px
+        }
+
+        .alertify-logs.right>* {
+            float: right;
+            transform: translateZ(0)
+        }
+
+        .alertify-logs.right>.show {
+            right: 0;
+            opacity: 1
+        }
+
+        .alertify-logs.right>*,
+        .alertify-logs.right>.hide {
+            right: -110%;
+            opacity: 0
+        }
+
+        .alertify-logs.top {
+            top: 0
+        }
+
+        .alertify-logs>* {
+            box-sizing: border-box;
+            transition: all .4s cubic-bezier(.25, .8, .25, 1);
+            position: relative;
+            clear: both;
+            backface-visibility: hidden;
+            perspective: 1000;
+            max-height: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none
+        }
+
+        .alertify-logs>.show {
+            margin-top: 12px;
+            opacity: 1;
+            max-height: 1000px;
+            padding: 12px;
+            pointer-events: auto
+        }
+    </style>
+    <style id="magic-target"></style>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="https://d4fodtu7cqfym.cloudfront.net/favicon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="https://d4fodtu7cqfym.cloudfront.net/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://d4fodtu7cqfym.cloudfront.net/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://d4fodtu7cqfym.cloudfront.net/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://d4fodtu7cqfym.cloudfront.net/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114"
+        href="https://d4fodtu7cqfym.cloudfront.net/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120"
+        href="https://d4fodtu7cqfym.cloudfront.net/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144"
+        href="https://d4fodtu7cqfym.cloudfront.net/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152"
+        href="https://d4fodtu7cqfym.cloudfront.net/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="https://d4fodtu7cqfym.cloudfront.net/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"
+        href="https://d4fodtu7cqfym.cloudfront.net/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="https://d4fodtu7cqfym.cloudfront.net/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96"
+        href="https://d4fodtu7cqfym.cloudfront.net/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="https://d4fodtu7cqfym.cloudfront.net/favicon/favicon-16x16.png">
+    <link rel="manifest" href="https://d4fodtu7cqfym.cloudfront.net/favicon/manifest.json">
+    <meta name="theme-color" content="#6441a5">
+    <link rel="stylesheet" type="text/css" href="https://cdn-assets.tgd.kr/css/tgd.layout.min.css?v=48963bbf22">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn-assets.tgd.kr/css/1145f263256c923716d2b8eade2f6689.min.css?v=48963bbf22">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4">
+                    <a href="#"><img src="https://d4fodtu7cqfym.cloudfront.net/images/logo_new.png" alt=""></a>
+                </div>
+                <div class="col-xs-8" align="right">
+                    <form action="#" method="get" id="right-search-form">
+                        <input type="text" placeholder="트게더 검색" value="" id="right-search-input" name="q">
+                        <button type="submit" id="right-search-btn"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="header-bar" class="container">
+            <div class="row">
+                <div id="header-menu-left" class="col-xs-2" align="left">
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="latestDropdown" data-toggle="dropdown">
+                            <i class="fa fa-clock-o"></i> 최근<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="latestDropdown" id="latestDropdownMenu">
+                            <li><a href="#"><span class="name">매직트게더 1</span> <span class="delrow"><i
+                                            class="fa fa-remove"></i></span></a></li>
+                            <li><a href="#"><span class="name">매직트게더 2</span> <span class="delrow"><i
+                                            class="fa fa-remove"></i></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="favoriteDropdown" data-toggle="dropdown">
+                            <i class="fa fa-star"></i> <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="favoriteDropdown" id="favoriteDropdownMenu"></ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="playgroundDropdown" data-toggle="dropdown">
+                            <i class="fa fa-smile-o"></i> <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="playgroundDropdown" id="playgroundDropdownMenu">
+                            <li><a href="#">출석체크</a></li>
+                            <li><a href="#">전광판</a></li>
+                            <li><a href="#">아이콘샵</a></li>
+                            <li><a href="#">포인트경품</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">채팅툴</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="header-top-notice" class="col-xs-8" align="center"><strong class="notice-badge">광고</strong> <a
+                        href="#" >매직트게더 전광판 광고 테스트</a>
+                </div>
+
+                <div id="header-menu-right" class="col-xs-2" align="right">
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle">
+
+                            <i class="fa fa-envelope-o"></i> <span class="caret"></span>
+                        </a>
+                    </div>
+                    <div class="dropdown">
+                        <a id="userDropdown" class="dropdown-toggle" href="#"><i
+                                class="fa fa-user"></i> 로그인</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div id="content-area">
+
+        <div class="container" id="main">
+            <div class="row">
+                <div class="col-xs-2" id="main-menu">
+                    <div class="menu-wrapper">
+                        <div class="header"><i class="fa fa-bars"></i> 트게더 전체 메뉴</div>
+                        <a class="shortcut-link" data-shortcut="a" href="#"><em>A</em>전체 글 보기</a>
+                        <div class="spacer"></div>
+                        <a class="shortcut-link" data-shortcut="b" href="#"><em>B</em>스트리머 게시판</a>
+                        <a class="shortcut-link" data-shortcut="c" href="#"><em>C</em>커뮤니티</a>
+                        <a class="shortcut-link" data-shortcut="h" href="#"><em>H</em>핫클립</a>
+                        <a class="shortcut-link" href="#" ><em><i
+                                    class="fa fa-external-link"></i></em>트게더 랭킹</a>
+                        <a class="shortcut-link" href="#" ><em><i
+                                    class="fa fa-external-link"></i></em>게임대회</a>
+                        <div class="spacer"></div>
+                        <a class="shortcut-link" data-shortcut="p" href="#"><em>P</em>방송홍보</a>
+                        <a class="shortcut-link" data-shortcut="u" href="#"><em>U</em>구인구직</a>
+                        <a class="shortcut-link" data-shortcut="q" href="#"><em>Q</em>Q&amp;A</a>
+                        <a class="shortcut-link" data-shortcut="t" href="#"><em>T</em>방송 TIP</a>
+                        <div class="spacer"></div>
+                        <a class="shortcut-link" data-shortcut="n" href="#"><em>N</em>공지사항</a>
+                        <a class="shortcut-link" data-shortcut="e" href="#"><em>E</em>이벤트</a>
+                        <a class="shortcut-link" data-shortcut="s" href="#"><em>S</em>건의/신고</a>
+                    </div>
+
+                    <div align="center" style="background:#fff;padding:10px 0;">
+                        <div id="div-gpt-ad-1598163232611-0" style="width: 160px; height: 600px;"
+                            data-google-query-id="CPfuys3P1-8CFRgKXAodMyQBoQ">
+
+                            <div id="google_ads_iframe_/21681211024/Board_1_Middle_Left_PC_0__container__"
+                                style="border: 0pt none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-10" id="main-content">
+                    <div class="frame">
+                        <div id="board-info" data-owner-id="123456789" data-type="comm" data-alias="magic"
+                            data-name="magic">
+                            <h1>
+                                <a href="#">매직트게더</a>
+                                <span id="score-area" title="게시판 점수"><i class="fa fa-trophy"></i> 22.3k</span>
+                                <span id="viewers-area" class=""><i class="fa fa-user"></i> <span
+                                        id="viewers">34</span></span>
+                            </h1>
+
+                            <div id="board-info-bottom">
+                                <a href="#"><i class="fa fa-info-circle"></i> 소개</a>
+                            </div>
+                        </div>
+
+                        <!-- tgd_board_list -->
+                        <div id="article-list">
+                            <div id="article-option-area">
+                                <input type="checkbox" id="hide_notice" class="hide">
+                                <button id="article-option-area-toggle-btn"><i class="fa fa-eye"></i></button>
+                            </div>
+                            <div id="article-list-category">
+                                <a class="nav-link active" href="#"><i class="fa fa-home"></i></a>
+                                <a style="color:#5b00f7" class="nav-link " href="#">자유게시판</a>
+                                <a style="color:#25af00" class="nav-link "
+                                    href="#">공지사항</a><a
+                                    style="color:#f98300" class="nav-link " href="#">메뉴 1번</a>
+                                <a style="color:#ea5100" class="nav-link "
+                                    href="#">메뉴 이름이 좀 길다면</a>
+                                <a style="color:#ff008d"
+                                    class="nav-link " href="#">English Menu</a>
+                            </div>
+
+                            <div style="background:#efefef;padding:10px 8px;">
+                                <div style="display: flex;">
+                                    <div style="width: 728px; height: 90px;">
+                                    </div>
+                                    <div
+                                        style="flex: 1;text-align:center;vertical-align:middle;line-height:90px;color:#aaa;font-family:Tahoma;font-size:12px;">
+                                        AD</div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category notice  " id="article-list-row-34676068">
+                                <div class="item">
+
+                                    <div class="list-header v13">
+                                        <strong>공지</strong> </div>
+
+                                    <div class="list-title">
+
+
+                                        <span class="a-badge"><i class="fa fa-info-circle"></i></span><a title="공지사항 1번"
+                                            href="#" style="font-weight:bold;color:#000000">
+                                            공지사항 1번 </a>
+
+                                        <small class="comment-count">[5]</small>
+
+
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                                관리자 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        01-01 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category notice  " id="article-list-row-26899042">
+                                <div class="item">
+
+                                    <div class="list-header v8">
+                                        <strong>공지</strong> </div>
+
+                                    <div class="list-title">
+
+
+                                        <span class="a-badge"><i class="fa fa-info-circle"></i></span><a
+                                            title="공지사항 테스트 2번 긴 문장이 들어갈 때 다음과 같이 처리합니다. 만일 길이가 초과되었을 때는 다음과 같이 처리합니다."
+                                            href="#" style="font-weight:bold;color:#000000">
+                                            공지사항 테스트 2번 긴 문장이 들어갈 때 다음과 같이 처리합니다. 만일 길이가 초과되었을 때는 다음과 같이 처리합니다. </a>
+
+
+
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                                여섯글자이름 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        02-29 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category notice  " id="article-list-row-21093438">
+                                <div class="item">
+
+                                    <div class="list-header v2">
+                                        <strong>공지</strong> </div>
+
+                                    <div class="list-title">
+
+                                        <span class="a-badge"><i class="fa fa-info-circle"></i></span><a
+                                            title="English Name Test" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            English Name Test </a>
+
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                            Moderator </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        12-31 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v1">
+                                        <span>1</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 1" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 1 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        1:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v5">
+                                        <span>5</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 2" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 2 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수2 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        8:20 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v0">
+                                        <span>0</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 예시 3" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 예시 3 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                                관리자1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        11:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v1">
+                                        <span>1</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 1" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 1 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        1:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v5">
+                                        <span>5</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 2" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 2 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수2 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        8:20 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v0">
+                                        <span>0</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 예시 3" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 예시 3 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                                관리자1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        11:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v1">
+                                        <span>1</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 1" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 1 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        1:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v5">
+                                        <span>5</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 2" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 2 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수2 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        8:20 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v0">
+                                        <span>0</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 예시 3" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 예시 3 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                                관리자1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        11:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v1">
+                                        <span>1</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 1" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 1 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        1:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v5">
+                                        <span>5</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 2" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 2 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수2 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        8:20 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v0">
+                                        <span>0</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 예시 3" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 예시 3 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                                관리자1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        11:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v1">
+                                        <span>1</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 1" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 1 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        1:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v5">
+                                        <span>5</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 2" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 2 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수2 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        8:20 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v0">
+                                        <span>0</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 예시 3" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 예시 3 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                                관리자1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        11:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v1">
+                                        <span>1</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 1" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 1 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        1:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v5">
+                                        <span>5</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 2" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 2 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수2 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        8:20 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v0">
+                                        <span>0</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 예시 3" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 예시 3 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                                관리자1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        11:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v1">
+                                        <span>1</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 1" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 1 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        1:23 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v5">
+                                        <span>5</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 유형 2" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 유형 2 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                트수2 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        8:20 </div>
+                                </div>
+                            </div>
+
+                            <div class="article-list-row has-category   " id="article-list-row-12345678">
+                                <div class="item">
+
+                                    <div class="list-header v0">
+                                        <span>0</span> </div>
+
+                                    <div class="list-title">
+
+                                        <div class="list-category"><span class="category" style="color:#5b00f7">자유게시판
+                                            </span></div>
+
+                                        <span class="a-badge"><i class="fa fa-commenting-o"></i></span><a
+                                            title="게시물 예시 3" href="#"
+                                            style="font-weight:bold;color:#000000">
+                                            게시물 예시 3 </a>
+
+                                        <div class="list-writer  logged">
+                                            <span>
+                                                <img src="https://static-cdn.jtvnw.net/chat-badges/globalmod.png"
+                                                    alt="Global Moderator" title="Global Moderator" align="absmiddle">
+                                                관리자1 </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-time">
+                                        11:23 </div>
+                                </div>
+                            </div>
+
+
+                            <div id="article-list-menu">
+                                <a href="#" class="btn square btn-default best"><i
+                                        class="fa fa-star"></i> 인기글</a>
+                                <ul class="pagination">
+                                    <li class="disabled"></li>
+                                    <li class="active"><a href="#">1<span class="sr-only"></span></a></li>
+                                    <li><a href="#" data-ci-pagination-page="2">2</a></li>
+                                    <li><a href="#" data-ci-pagination-page="3">3</a></li>
+                                    <li><a href="#" data-ci-pagination-page="4">4</a></li>
+                                    <li><a href="#" data-ci-pagination-page="2" rel="next">&gt;</a>
+                                    </li>
+                                </ul> <a href="#" class="btn square btn-primary write"><i
+                                        class="fa fa-pencil"></i> 글 쓰기</a>
+                            </div>
+
+                            <form class="input-group" method="get" action="#" id="boardSearchForm">
+                                <input type="hidden" name="search_type" value="titlecont">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn square btn-default dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                            id="search-type-desc">제목+내용</span> <span class="caret"></span></button>
+                                    <div class="dropdown-menu">
+                                        <!-- <li><a href="#" data-value="title">제목</a></li> -->
+                                        <li><a href="#" data-value="titlecont">제목+내용</a></li>
+                                        <li><a href="#" data-value="nickname">닉네임</a></li>
+                                    </div>
+                                </span>
+                                <input type="text" name="search_term" class="form-control" placeholder="검색어" value="">
+                                <span class="input-group-btn">
+                                    <button class="btn square btn-default" type="submit"><i
+                                            class="fa fa-search"></i></button>
+                                </span>
+                            </form>
+                        </div>
+
+                        <ul id="writerContextMenu" class="dropdown-menu" role="menu" style="display: none;">
+                            <li><a tabindex="-1" href="#">프로필</a></li>
+                            <li><a tabindex="-1" href="#">작성 글 보기</a></li>
+                            <li><a tabindex="-1" href="#">차단하기</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ad -->
+            <div id="weare-out-of-food" data-origin-width="300"
+                style="width: 300px; margin-top: 10px; top: 106px; left: 0px; position: fixed; overflow: hidden; z-index: 10000;">
+            </div>
+
+            <div id="plz-dont-block-me" data-origin-width="300"
+                style="width: 300px; margin-top: 10px; top: 106px; right: 0px; position: fixed; overflow: hidden; z-index: 10000;">
+
+            </div>
+            <!-- end ad -->
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <span>© 2017-2021 트게더<br><a href="#" >이용약관</a> | <a href="#"
+                    >개인정보취급방침</a> | <a href="#" >인재 채용 중</a> | <a
+                    href="#">광고문의</a> | <a href="#">고객센터</a><br>
+                트게더는 Twitch에서 운영하는 사이트가 아닙니다.<br><br>
+                <a href="#" id="switch-platform-link">모바일버전으로 전환하기</a></span>
+        </div>
+    </footer>
+
+    <a href="#" id="movetotop" style="left: 1723px; display: block;"><img
+            src="https://d4fodtu7cqfym.cloudfront.net/images/move_to_top.png" alt=""></a>
+
+</body>
+
+</html>
