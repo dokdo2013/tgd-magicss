@@ -1,12 +1,12 @@
 {
   "name": "tgd-test",
   "version": "1.0.0",
-  "description": "",
+  "description": "tgd-test",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm install"
   },
-  "author": "",
+  "author": "tgd-test",
   "license": "ISC",
   "dependencies": {
     "@emmetio/codemirror-plugin": "^1.2.4",
